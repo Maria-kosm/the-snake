@@ -49,7 +49,9 @@ class GameObject:
 
     def draw(self):
         """Определить интерфейс отрисовки игрового объекта."""
-        raise NotImplementedError
+        raise NotImplementedError(
+            "Метод draw должен быть реализован в дочернем классе"
+        )
 
 
 class Apple(GameObject):
@@ -59,19 +61,17 @@ class Apple(GameObject):
         """Инициализировать яблоко, его цвет и случайную позицию."""
         super().__init__()
         self.body_color = APPLE_COLOR
-        if occupied_positions is None:
-            occupied_positions = []
         self.randomize_position(occupied_positions)
 
     def randomize_position(self, occupied_positions):
         """Установить случайную позицию яблока в пределах игрового поля."""
-        while True:
+        if occupied_positions is None:
+            occupied_positions = []
+        self.position = None
+        while self.position in occupied_positions or self.position is None:
             random_x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
             random_y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-            new_position = (random_x, random_y)
-            if new_position not in occupied_positions:
-                self.position = new_position
-                break
+            self.position = (random_x, random_y)
 
     # Метод draw класса Apple
     def draw(self):
